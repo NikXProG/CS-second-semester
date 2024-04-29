@@ -7,7 +7,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c6abfe6-3cf5-4a07-b1de-42ac0afbb9b3" name="Changes" comment="" />
+    <list default="true" id="6c6abfe6-3cf5-4a07-b1de-42ac0afbb9b3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.CSharp2sem/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CSharp2sem/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSharp2sem/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSharp2sem/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/obj/rider.project.restore.info" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +21,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/fba9afd29efa49229d2dd911da0bdfedc8e910/d0/bbe7a54f/IEnumerable.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -26,9 +35,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;.NET Project.CSharp2sem.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -67,12 +77,13 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9ef63a2c-ee0d-4cb6-bca8-3fa9d20c9405" name="Changes" comment="" />
+      <changelist id="6c6abfe6-3cf5-4a07-b1de-42ac0afbb9b3" name="Changes" comment="" />
       <created>1714065472711</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1714065472711</updated>
       <workItem from="1714065474090" duration="1048000" />
+      <workItem from="1714384544549" duration="27958000" />
     </task>
     <servers />
   </component>
