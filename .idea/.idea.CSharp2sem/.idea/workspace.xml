@@ -7,13 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c6abfe6-3cf5-4a07-b1de-42ac0afbb9b3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.CSharp2sem/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CSharp2sem/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSharp2sem/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/obj/Debug/net8.0/CSharp2sem.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSharp2sem/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/CSharp2sem/obj/rider.project.restore.info" afterDir="false" />
-    </list>
+    <list default="true" id="6c6abfe6-3cf5-4a07-b1de-42ac0afbb9b3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,6 +78,7 @@
       <updated>1714065472711</updated>
       <workItem from="1714065474090" duration="1048000" />
       <workItem from="1714384544549" duration="27958000" />
+      <workItem from="1714423606023" duration="632000" />
     </task>
     <servers />
   </component>
