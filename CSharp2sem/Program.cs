@@ -1,139 +1,149 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
+using System.Xml;
+
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace CSharp2sem
 {
+    public struct Info
+    {
+        public object? patient { get; set; }
+
+
+    }
     public class Program
     {
-        
-        class TokenTextFile : IDisposable, IEnumerable<string>
-        {
-            private HashSet<char> _lexemes;
-            private readonly StreamReader _sreaderFile;
-            private readonly string _filePath;  
-            public TokenTextFile(HashSet<char> collection, string filePath)
-            {
-                this._lexemes = collection;
-                this._filePath = filePath;
-                this._sreaderFile = new StreamReader(filePath);
-            }
-            
-            
-            public IEnumerator<string> GetEnumerator()
-            {
-                return new StreamReaderEnumerator(_lexemes, _sreaderFile);
-            }
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.GetEnumerator();
-            }
-            public void Dispose()
-            {
-                _sreaderFile.Dispose();
-                System.GC.SuppressFinalize(this);
 
-            }
-            ~TokenTextFile()
+        public abstract class Person
+        {
+
+
+        }
+        public class Patient : Person
+        {
+            public bool healthStatus { get; set; }
+            public int indexPatient { get; set; }
+            public Patient()
             {
-                _sreaderFile.Close();
+                this.healthStatus = (new Random().Next(2) == 1) ? true : false;
             }
+
+        }
+        public class Doctor : Person
+        {
+            public bool busyStatus { get; set; } = false;
+            public int timeForHelp { get; set; }
+
+            public Doctor(int T)
+            {
+                this.timeForHelp = new Random().Next(T);
+            }
+
         }
 
-
-        public class StreamReaderEnumerator : IEnumerator<string>
+        public class InfectiousDiseasesDepartment
         {
-            private readonly StreamReader _streamReaderFile;
-            private readonly HashSet<char> _collection;
-            private string? _current;
-            private int _charPos;
-            private string? _line;
-            public StreamReaderEnumerator(HashSet<char> collection, StreamReader srFile)
+            private readonly int _countDoctors;
+            private readonly int _countPatients;
+            private const int T = 30;
+            private Patient?[] pPatients;
+            private Doctor?[] pDoctors;
+            private const int RoomSize = 4;
+            private Patient?[] people_room = new Patient[RoomSize];
+            private int countPatientsTreated = 0;
+
+            public InfectiousDiseasesDepartment(int N, int M)
             {
-                this._collection = collection ?? throw new ArgumentNullException();;
-                this._streamReaderFile = srFile ?? throw new ArgumentNullException();;;
-                this._line = this._streamReaderFile.ReadLine();
+                this._countPatients = N;
+                this._countDoctors = M;
+                pPatients = new Patient[N];
+                pDoctors = new Doctor[M];
+                for (int i = 0; i < N; i++) pPatients[i] = new Patient();
+                for (int i = 0; i < M; i++) pDoctors[i] = new Doctor(T);
             }
-            public bool MoveNext()
+
+            public async Task jsonRecordingFileAsync(Patient pat)
             {
-                
-                if (_line == null) return false;
-                
-                foreach (var i in _collection)
+                var info = new Info
                 {
-                    _charPos = _line.IndexOf(i, 0); 
-                    if (_charPos != -1) break;
+                    patient = pat
+                };
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true // Установка параметра для форматирования с отступами и переносами строк
+                };
+                await using (FileStream fs = File.Create("config.json"))
+                {
+                    await JsonSerializer.SerializeAsync(fs, info, options);
+                    // Запись данных асинхронно
                 }
-                    
-                _current = ((_charPos == -1) ? (_line.Substring(0, _line.Length)) : (_line.Substring(0, _charPos)));
-                _line = _line.Remove(0, _charPos + 1);
-                    
-                if ((_charPos == -1)) _line = _streamReaderFile.ReadLine();
-
-                return true;
-
             }
 
-            public string Current
+            public void examinationRoom()
             {
-                get
+                for (int i = 0; i < pPatients.Length; i++)
                 {
-                    if (_streamReaderFile == null || _current == null)
+                    if ((pPatients[i] != null) && (countPatientsTreated == 0))
                     {
-                        throw new InvalidOperationException();
+                        // запихаем первого пациента в смотровую и относительно его здоровья 
+                        // будем оценивать остальных
+                        pPatients[i]!.indexPatient = i + 1;
+                        jsonRecordingFileAsync(pPatients[i]!);
+                        people_room![0] = pPatients[i]!;
+                        pPatients[i] = null;
+                        countPatientsTreated++;
                     }
-                    return _current;
+
+                    if ((pPatients[i] != null) && (pPatients[i]!.healthStatus == people_room?[0]!.healthStatus))
+                    {
+                        pPatients[i]!.indexPatient = i + 1;
+                        jsonRecordingFileAsync(pPatients[i]!);
+                        people_room[countPatientsTreated] = pPatients[i]!;
+                        pPatients[i] = null;
+                        countPatientsTreated++;
+                        System.Threading.Thread.Sleep(1000);
+                    }
+
+                    if (countPatientsTreated == people_room?.Length)
+                    {
+                        break;
+                    }
                 }
             }
-            object IEnumerator.Current => Current; 
-
-            public void Reset()
-            {
-                _streamReaderFile.DiscardBufferedData();
-                _streamReaderFile.BaseStream.Seek(0, SeekOrigin.Begin);
-                _current = null;
-            }
-
-            public void Dispose()
-            {
-                _streamReaderFile.Dispose();
-                GC.SuppressFinalize(this);
-
-            }
-            ~StreamReaderEnumerator()
-            {
-                _streamReaderFile.Close();
-            }
         }
-        public static int Main()
+
+        public static async Task Main()
         {
-
-
-
-            try
-            {
-                HashSet<char> col = ['.',';','*','~'];
-                string filePath = @"C:\Users\tiger\OneDrive\Рабочий стол\AAA.txt";
-                TokenTextFile tokenizer = new TokenTextFile(col, filePath);
-                foreach (var token in tokenizer)
-                {
-                    Console.WriteLine(token);
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-
-            
-            return 0;
-
+            Random rand = new Random();
+            int N = rand.Next(1, 8);
+            int M = rand.Next(1, 3);
+            InfectiousDiseasesDepartment apart = new(N, M);
+            apart.examinationRoom();
+            await apart.jsonRecordingFileAsync();
         }
-            
+
     }
 }
+/*                {
+
+                pPatient newPatient = pPatients[countPatientsTreated]!;
+
+                if (people_room[0].healthStatus == newPatient.healthStatus)
+                {
+                    people_room[countPatientsTreated++] = newPatient;
+                }
+                else
+                {
+                    pPatient newPatient = pPatients[countPatientsTreated]!;
+                }
+                Console.WriteLine(countPatientsTreated);
+
+
+
+
+            }*/
