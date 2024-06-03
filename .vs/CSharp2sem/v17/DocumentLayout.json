@@ -14,8 +14,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +28,7 @@
               "RelativeDocumentMoniker": "CSharp2sem\\Program.cs",
               "ToolTip": "C:\\Users\\tiger\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\C# \u0440\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430\\CSharp2sem\\CSharp2sem\\Program.cs",
               "RelativeToolTip": "CSharp2sem\\Program.cs",
-              "ViewState": "AQIAACAAAAAAAAAAAAAwwGYAAAAAAAAA",
+              "ViewState": "AQIAAKoAAAAAAAAAAADwv78AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-03T13:35:10.582Z",
               "EditorCaption": ""
