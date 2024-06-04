@@ -1,0 +1,32 @@
+{
+  "people": ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace", "Hannah", "Isaac", "Jack", "Karen", "Leo", "Mona", "Nina", "Oscar", "Paul", "Quinn", "Rose", "Sam", "Tina", "Uma", "Vince", "Wendy", "Xander", "Yara", "Zack"],
+  "connections": {
+    "Alice": ["Bob", "Charlie"],
+    "Bob": ["Alice", "David", "Eve"],
+    "Charlie": ["Alice", "Frank"],
+    "David": ["Bob", "Grace"],
+    "Eve": ["Bob", "Hannah"],
+    "Frank": ["Charlie", "Isaac"],
+    "Grace": ["David", "Jack"],
+    "Hannah": ["Eve", "Karen"],
+    "Isaac": ["Frank", "Leo"],
+    "Jack": ["Grace", "Mona"],
+    "Karen": ["Hannah", "Nina"],
+    "Leo": ["Isaac", "Oscar"],
+    "Mona": ["Jack", "Paul"],
+    "Nina": ["Karen", "Quinn"],
+    "Oscar": ["Leo", "Rose"],
+    "Paul": ["Mona", "Sam"],
+    "Quinn": ["Nina", "Tina"],
+    "Rose": ["Oscar", "Uma"],
+    "Sam": ["Paul", "Vince"],
+    "Tina": ["Quinn", "Wendy"],
+    "Uma": ["Rose", "Xander"],
+    "Vince": ["Sam", "Yara"],
+    "Wendy": ["Tina", "Zack"],
+    "Xander": ["Uma"],
+    "Yara": ["Vince"],
+    "Zack": ["Wendy"]
+  },
+  "initial_infected": ["Alice", "Charlie"]
+}
