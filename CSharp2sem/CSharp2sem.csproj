@@ -7,4 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Reference Include="ValidatorDLL">
+        <HintPath>..\ValidatorDLL\ValidatorDLL\bin\Debug\net8.0\ValidatorDLL.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

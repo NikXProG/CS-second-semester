@@ -1,0 +1,12 @@
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\bin\Debug\net8.0\ValidatorDLL.deps.json
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\bin\Debug\net8.0\ValidatorDLL.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\bin\Debug\net8.0\ValidatorDLL.pdb
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.AssemblyInfoInputs.cache
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.AssemblyInfo.cs
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.csproj.CoreCompileInputs.cache
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.sourcelink.json
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\refint\ValidatorDLL.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ValidatorDLL.pdb
+C:\Users\tiger\OneDrive\Рабочий стол\git\ValidatorDLL\ValidatorDLL\obj\Debug\net8.0\ref\ValidatorDLL.dll

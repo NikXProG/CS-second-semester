@@ -1,107 +1,211 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using static CSharp2sem.Program;
-using System.Threading.Tasks;
-namespace CSharp2sem
+using System.Data;
+using ValidatorDLL;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
+
+namespace DataValidatorDemo
 {
-
-    public class Program
+    class Program
     {
-        public class Cache
+        #region RealizationData
+        public class UserData
         {
-            private readonly  TimeSpan _timeLifeRecord;
-            private readonly Int32 _maxCountRecord;
-            private readonly Dictionary<string, DateTime> _timeLifeRecords = new Dictionary<string, DateTime>();
-            public readonly Dictionary<string, object> _cache = new Dictionary<string, object>();
-            
-            public Cache(TimeSpan timeLifeRecord, Int32 maxCountRecord) { 
-                this._timeLifeRecord = timeLifeRecord;
-                this._maxCountRecord = maxCountRecord;
-                _cache.EnsureCapacity(maxCountRecord);
-                _timeLifeRecords.EnsureCapacity(maxCountRecord);
-            }
-
-            public object? Get(string key)
-            {
-
-                if (!(_cache.ContainsKey(key)))
-                {
-                    throw new KeyNotFoundException();
-                }
-
-                return _cache[key];
-            }
-            public async void Save(object CacheData, string key)
-            {
-                
- 
-                if ( _cache.ContainsKey(key) ){
-                    throw new ArgumentException();
-                }
-
-                if (_cache.Count == _maxCountRecord)
-                {
-
-                    RemovedOldestObject(); // удаление самого старого объекта
-
-                }
-
-                _cache.Add(key, CacheData);
-                DateTime timeNow = DateTime.Now;
-                _timeLifeRecords.Add(key, timeNow);
-                await ClearCacheAsync();   // вызов асинхронного метода
-                Thread.Sleep(4000);
-
-                Console.WriteLine(_cache.Count);
-            }
-            private void RemovedOldestObject()
-            {
-                
-                DateTime timeMax = DateTime.MaxValue;
-                string? key = null;
-                foreach (var item in _timeLifeRecords)
-                {
-
-                    if (item.Value < timeMax)
-                    {
-                        timeMax = item.Value;//DateTime.Now.TimeOfDay - timeMax.TimeOfDay;
-                        key = item.Key;
-                    }
-            
-                }
-                if (key != null)
-                {
-                    _timeLifeRecords.Remove(key);
-                    _cache.Remove(key);
-                }
-
-            }
-            private async Task ClearCacheAsync()
-            {
-                Console.WriteLine("Начало метода PrintAsync"); // выполняется синхронно
-                await Task.Run(() => Print());
-                Console.WriteLine("Конец метода PrintAsync");
-            }
-            void Print()
-            {
-                Thread.Sleep(3000);     // имитация продолжительной работы
-                Console.WriteLine("Hello METANIT.COM");
-            }
+            public string? Username { get; set; }
+            public string? Fullname { get; set; }
+            public string? Email { get; set; }
+            public string? Password { get; set; }
 
         }
+
+        public static UserData ParseUserData(List<string> data)
+        {
+            var userData = new UserData();
+
+            foreach (var item in data)
+            {
+                var keyValue = item.Split(':');
+                if (keyValue.Length == 2)
+                {
+                    switch (keyValue[0].Trim())
+                    {
+                        case "username":
+                            userData.Username = keyValue[1].Trim();
+                            break;
+                        case "fullname":
+                            userData.Fullname = keyValue[1].Trim();
+                            break;
+                        case "email":
+                            userData.Email = keyValue[1].Trim();
+                            break;
+                        case "password":
+                            userData.Password = keyValue[1].Trim();
+                            break;
+                    }
+                }
+            }
+
+            return userData;
+        }
+
+        #endregion
+
+        #region rules
+
+        public class SampleValidationRule : IValidationRule<string>
+        {
+            public void Validate(string data)
+            {
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    throw new ValidationException("Data cannot be null or whitespace.");
+                }
+
+            }
+        }
+        public class UsernameValidationRule : IValidationRule<UserData>
+        {
+            public void Validate(UserData data)
+            {
+                if (string.IsNullOrWhiteSpace(data.Username))
+                {
+                    throw new ValidationException("The Username cannot be null or whitespace.");
+                }
+                if (!Regex.IsMatch(data.Username, @"^[a-zA-Z0-9_]+$"))
+                {
+                    throw new ValidationException("The username must contain only English letters and numbers (underscores \"_\" are allowed)");
+                }
+                if (data.Username.Length < 7)
+                {
+                    throw new ValidationException("The username must contain a minimum of 7 characters.");
+                }
+            }
+        }
+
+        public class FullnameValidationRule : IValidationRule<UserData>
+        {
+            public void Validate(UserData data)
+            {
+                if (string.IsNullOrWhiteSpace(data.Fullname))
+                {
+                    throw new ValidationException("The fullname cannot be null or whitespace.");
+                }
+
+                string[] fullnameArray = data.Fullname.Split(' ');
+
+                foreach (string namePart in fullnameArray)
+                {
+                    // Проверяем первую букву на заглавную
+                    if (!char.IsUpper(namePart[0]))
+                    {
+                        throw new ValidationException("The first letter of each name part in fullname must be uppercase.");
+                    }
+
+                    // Проверяем остальные буквы на строчные
+                    for (int i = 1; i < namePart.Length; i++)
+                    {
+                        if (!char.IsLower(namePart[i]))
+                        {
+                            throw new ValidationException("The subsequent letters of each name part in fullname must be lowercase.");
+                        }
+                    }
+
+                }
+
+
+                if (data.Fullname.Length > 100)
+                {
+                    throw new ValidationException("The username must contain a maxsimum 100 of characters.");
+                }
+
+            }
+        }
+
+        public class EmailValidationRule : IValidationRule<UserData>
+        {
+            public void Validate(UserData data)
+            {
+                if (string.IsNullOrWhiteSpace(data.Email))
+                {
+                    throw new ValidationException("Email cannot be null or whitespace.");
+                }
+                if (!Regex.IsMatch(data.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))
+                {
+                    throw new ValidationException("Invalid email format.");
+                }
+            }
+        }
+
+        public class PasswordValidationRule : IValidationRule<UserData>
+        {
+            public void Validate(UserData data)
+            {
+                if (string.IsNullOrWhiteSpace(data.Password))
+                {
+                    throw new ValidationException("Password cannot be null or whitespace.");
+                }
+
+                if (data.Password.Length < 15)
+                {
+                    throw new ValidationException("password must contain at least 15 characters");
+                }
+
+                if (!Regex.IsMatch(data.Password, @"^[a-zA-Z0-9_]+$"))
+                {
+                    throw new ValidationException("\r\nThe password must contain an uppercase and lowercase letter and the symbol \"_\"");
+                }
+
+            }
+        }
+
+        #endregion
+
         public static int Main()
         {
-            TimeSpan time = new TimeSpan(0, 0, 5, 0);
-            var cache = new Cache(time, 2);
-            cache.Save("sdsds", "1");
-            Console.WriteLine(cache.Get("1"));
-            cache.Save("sdsSDSDSds", "2");
-            Console.WriteLine(cache.Get("2"));
-            cache.Save("sdsSSDFFDSDSDSds", "0");
-            Console.WriteLine(cache.Get("0"));
+            try
+            {
 
-            return 0;
+                var validator = new DataValidatorBuilder<string>().AddRule(new SampleValidationRule()).Build();
+
+                var dataToValidateRegister = new List<string> { "Sample", "Good", "Super", "List" };
+
+                foreach (var data in dataToValidateRegister)
+                {
+                    validator.Validate(data);
+                    Console.WriteLine($"'{data}' is valid.");
+                }
+
+                var validator1 = new DataValidatorBuilder<UserData>()
+                    .AddRule(new UsernameValidationRule())
+                    .AddRule(new FullnameValidationRule())
+                    .AddRule(new EmailValidationRule())
+                    .AddRule(new PasswordValidationRule())
+                    .Build();
+
+                var dataToValidateRegister1 = new List<string> { "username:Sasha322", "fullname:Alexander Shevtsov", "email:kuma@gmail.com", "password:22321S3_234324DFSD34f" };
+
+                var userData = ParseUserData(dataToValidateRegister1);
+
+                validator1.Validate(userData);
+                Console.WriteLine($"'{nameof(userData)}' is valid.");
+
+                return 0;
+
+            }
+            catch (AggregateException exceptions)
+            {
+                foreach (var ex in exceptions.InnerExceptions)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                    return -2;
+                }
+
+                return -1;
+
+            }
+
+
+
         }
 
     }
