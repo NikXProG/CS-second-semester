@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\tiger\\OneDrive\\Рабочий стол\\C# разработка\\CSharp2sem\\CSharp2sem\\CSharp2sem.csproj",
+      "projectUniqueName": "C:\\Users\\tiger\\OneDrive\\Рабочий стол\\git\\CSharp2sem\\CSharp2sem.csproj",
       "projectName": "CSharp2sem",
-      "projectPath": "C:\\Users\\tiger\\OneDrive\\Рабочий стол\\C# разработка\\CSharp2sem\\CSharp2sem\\CSharp2sem.csproj",
+      "projectPath": "C:\\Users\\tiger\\OneDrive\\Рабочий стол\\git\\CSharp2sem\\CSharp2sem.csproj",
       "packagesPath": "C:\\Users\\tiger\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\tiger\\OneDrive\\Рабочий стол\\C# разработка\\CSharp2sem\\CSharp2sem\\obj\\",
+      "outputPath": "C:\\Users\\tiger\\OneDrive\\Рабочий стол\\git\\CSharp2sem\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
