@@ -1,149 +1,240 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
-using System.Xml;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CSharp2sem
 {
-    public struct Info
+    public abstract class Person
     {
-        public object? patient { get; set; }
+        private int _id { get; }
 
+        protected Person(int id)
+        {
+            this._id = id;
+        }
 
+        public int GetId() => _id;
     }
+
+    public class Doctor : Person
+    {
+        private readonly object _lock = new object();
+
+        public Doctor(int indexDoctor) : base(indexDoctor) { }
+
+        public async Task TreatPatient(Patient patient, int treatmentTime)
+        {
+            await Task.Delay(treatmentTime);
+            Console.WriteLine($"Doctor {this.GetId()} treated patient {patient.GetId()} (sick: {patient._healthStatusSick}) for {treatmentTime} units.");
+        }
+
+        public async Task AssistDoctor(Doctor doctor, int assistanceTime)
+        {
+            await Task.Delay(assistanceTime);
+            Console.WriteLine($"Doctor {this.GetId()} assisted Doctor {doctor.GetId()} for {assistanceTime} units.");
+        }
+
+        public async Task LogDoctorActivityAsync(string log)
+        {
+            lock (_lock)
+            {
+                using (StreamWriter writer = new StreamWriter("doctor_log.txt", append: true))
+                {
+                    writer.WriteLine($"{DateTime.Now}: {log}");
+                }
+            }
+        }
+    }
+
+    public class Patient : Person
+    {
+        public readonly bool _healthStatusSick;
+
+        public Patient(int indexPatient, bool isSick) : base(indexPatient)
+        {
+            this._healthStatusSick = isSick;
+        }
+    }
+
     public class Program
     {
-
-        public abstract class Person
-        {
-
-
-        }
-        public class Patient : Person
-        {
-            public bool healthStatus { get; set; }
-            public int indexPatient { get; set; }
-            public Patient()
-            {
-                this.healthStatus = (new Random().Next(2) == 1) ? true : false;
-            }
-
-        }
-        public class Doctor : Person
-        {
-            public bool busyStatus { get; set; } = false;
-            public int timeForHelp { get; set; }
-
-            public Doctor(int T)
-            {
-                this.timeForHelp = new Random().Next(T);
-            }
-
-        }
-
         public class InfectiousDiseasesDepartment
         {
-            private readonly int _countDoctors;
-            private readonly int _countPatients;
-            private const int T = 30;
-            private Patient?[] pPatients;
-            private Doctor?[] pDoctors;
-            private const int RoomSize = 4;
-            private Patient?[] people_room = new Patient[RoomSize];
-            private int countPatientsTreated = 0;
+            private int _capacityRoom;
+            private ConcurrentQueue<Patient> _healthyQueue;
+            private ConcurrentQueue<Patient> _sickQueue;
+            private List<Patient> _inspectionRoom;
+            private List<Doctor> _doctors;
+            private int _treatmentTime;
+            private SemaphoreSlim _semaphore;
+            private string logFilePath = "log.txt";
 
-            public InfectiousDiseasesDepartment(int N, int M)
+            public InfectiousDiseasesDepartment(int N, int M, int T)
             {
-                this._countPatients = N;
-                this._countDoctors = M;
-                pPatients = new Patient[N];
-                pDoctors = new Doctor[M];
-                for (int i = 0; i < N; i++) pPatients[i] = new Patient();
-                for (int i = 0; i < M; i++) pDoctors[i] = new Doctor(T);
+                this._capacityRoom = N;
+                _semaphore = new SemaphoreSlim(N);
+                this._treatmentTime = T;
+                _healthyQueue = new ConcurrentQueue<Patient>();
+                _sickQueue = new ConcurrentQueue<Patient>();
+                _inspectionRoom = new List<Patient>();
+                _doctors = Enumerable.Range(0, M).Select(i => new Doctor(i)).ToList();
             }
 
-            public async Task jsonRecordingFileAsync(Patient pat)
+            public async Task AddPatient(Patient patient)
             {
-                var info = new Info
+                if (_semaphore.CurrentCount > 0 && CanEnterRoom(patient))
                 {
-                    patient = pat
-                };
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true // Установка параметра для форматирования с отступами и переносами строк
-                };
-                await using (FileStream fs = File.Create("config.json"))
-                {
-                    await JsonSerializer.SerializeAsync(fs, info, options);
-                    // Запись данных асинхронно
-                }
-            }
-
-            public void examinationRoom()
-            {
-                for (int i = 0; i < pPatients.Length; i++)
-                {
-                    if ((pPatients[i] != null) && (countPatientsTreated == 0))
-                    {
-                        // запихаем первого пациента в смотровую и относительно его здоровья 
-                        // будем оценивать остальных
-                        pPatients[i]!.indexPatient = i + 1;
-                        jsonRecordingFileAsync(pPatients[i]!);
-                        people_room![0] = pPatients[i]!;
-                        pPatients[i] = null;
-                        countPatientsTreated++;
-                    }
-
-                    if ((pPatients[i] != null) && (pPatients[i]!.healthStatus == people_room?[0]!.healthStatus))
-                    {
-                        pPatients[i]!.indexPatient = i + 1;
-                        jsonRecordingFileAsync(pPatients[i]!);
-                        people_room[countPatientsTreated] = pPatients[i]!;
-                        pPatients[i] = null;
-                        countPatientsTreated++;
-                        System.Threading.Thread.Sleep(1000);
-                    }
-
-                    if (countPatientsTreated == people_room?.Length)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
-        public static async Task Main()
-        {
-            Random rand = new Random();
-            int N = rand.Next(1, 8);
-            int M = rand.Next(1, 3);
-            InfectiousDiseasesDepartment apart = new(N, M);
-            apart.examinationRoom();
-            await apart.jsonRecordingFileAsync();
-        }
-
-    }
-}
-/*                {
-
-                pPatient newPatient = pPatients[countPatientsTreated]!;
-
-                if (people_room[0].healthStatus == newPatient.healthStatus)
-                {
-                    people_room[countPatientsTreated++] = newPatient;
+                    await _semaphore.WaitAsync();
+                    _inspectionRoom.Add(patient);
+                    Console.WriteLine($"Patient {patient.GetId()} entered the inspection room (sick: {patient._healthStatusSick}).");
+                    await LogPatientEntryAsync(patient);
+                    await Task.Delay(2000); // Добавляем задержку в 2 секунды перед обработкой следующего пациента
+                    await HandlePatients();
                 }
                 else
                 {
-                    pPatient newPatient = pPatients[countPatientsTreated]!;
+                    if (patient._healthStatusSick)
+                    {
+                        _sickQueue.Enqueue(patient);
+                        Console.WriteLine($"Patient {patient.GetId()} (sick) queued.");
+                    }
+                    else
+                    {
+                        _healthyQueue.Enqueue(patient);
+                        Console.WriteLine($"Patient {patient.GetId()} (healthy) queued.");
+                    }
                 }
-                Console.WriteLine(countPatientsTreated);
+            }
 
+            private bool CanEnterRoom(Patient patient)
+            {
+                return _inspectionRoom.Count == 0 || _inspectionRoom.All(p => p._healthStatusSick == patient._healthStatusSick);
+            }
 
+            private async Task HandlePatients()
+            {
+                foreach (var doctor in _doctors)
+                {
+                    if (_inspectionRoom.Count > 0)
+                    {
+                        var patient = _inspectionRoom[0];
+                        _inspectionRoom.RemoveAt(0);
+                        _semaphore.Release();
+                        await doctor.TreatPatient(patient, _treatmentTime);
+                        // Вызываем метод AssistDoctor для оказания помощи другим докторам
+                        foreach (var otherDoctor in _doctors)
+                        {
+                            if (otherDoctor != doctor)
+                            {
+                                await doctor.AssistDoctor(otherDoctor, _treatmentTime / 2); // Примерное время помощи
+                            }
+                        }
+                        // Журналируем активность доктора
+                        await doctor.LogDoctorActivityAsync($"Treated patient {patient.GetId()} (sick: {patient._healthStatusSick})");
+                    }
+                    else if (_healthyQueue.Count > 0 || _sickQueue.Count > 0) // Обрабатываем пациентов из очереди, если есть
+                    {
+                        Patient nextPatient;
+                        if (_healthyQueue.TryDequeue(out nextPatient))
+                        {
+                            _inspectionRoom.Add(nextPatient);
+                        }
+                        else if (_sickQueue.TryDequeue(out nextPatient))
+                        {
+                            _inspectionRoom.Add(nextPatient);
+                        }
+                        else
+                        {
+                            // Handle the case when both queues are empty
+                        }
 
+                        if (nextPatient != null)
+                        {
+                            Console.WriteLine($"Patient {nextPatient.GetId()} entered the inspection room (sick: {nextPatient._healthStatusSick}).");
+                            await LogPatientEntryAsync(nextPatient);
+                            await doctor.TreatPatient(nextPatient, _treatmentTime);
+                            // Вызываем метод AssistDoctor для оказания помощи другим докторам
+                            foreach (var otherDoctor in _doctors)
+                            {
+                                if (otherDoctor != doctor)
+                                {
+                                    await doctor.AssistDoctor(otherDoctor, _treatmentTime / 2); // Примерное время помощи
+                                }
+                            }
+                            // Журналируем активность доктора
+                            await doctor.LogDoctorActivityAsync($"Treated patient {nextPatient.GetId()} (sick: {nextPatient._healthStatusSick})");
+                        }
+                    }
+                }
+            }
 
-            }*/
+            private async Task LogPatientEntryAsync(Patient patient)
+            {
+                using (StreamWriter writer = new StreamWriter("patient_log.txt", append: true))
+                {
+                    await writer.WriteLineAsync($"{DateTime.Now}: Patient {patient.GetId()} entered inspection room (sick: {patient._healthStatusSick}).");
+                }
+            }
+
+            public async Task Run(List<Patient> patients)
+            {
+                List<Task> patientTasks = new List<Task>();
+
+                foreach (var patient in patients)
+                {
+                    patientTasks.Add(AddPatient(patient));
+                }
+
+                await Task.WhenAll(patientTasks);
+            }
+        }
+        public static async Task Main()
+        {
+            int N = 5;
+            int M = 7;
+            int T = 2000;
+
+            InfectiousDiseasesDepartment department = new InfectiousDiseasesDepartment(N, M, T);
+
+            List<Patient> patients = new List<Patient>
+            {
+                new Patient(1, false),
+                new Patient(2, true),
+                new Patient(3, false),
+                new Patient(4, true),
+                new Patient(5, false),
+                new Patient(6, true),
+                new Patient(7, true),
+                new Patient(8, false),
+                new Patient(9, false),
+                new Patient(10, false),
+                new Patient(11, true),
+                new Patient(12, true),
+                new Patient(13, true),
+                new Patient(14, true),
+                new Patient(15, false),
+                new Patient(16, false),
+                new Patient(17, false),
+                new Patient(18, true),
+                new Patient(19, true),
+                new Patient(20, true),
+                new Patient(21, true),
+                new Patient(22, false),
+                new Patient(23, false),
+                new Patient(24, false),
+                new Patient(25, true),
+                new Patient(26, true),
+                new Patient(27, true),
+                new Patient(28, true),
+                new Patient(29, false),
+                new Patient(30, false)
+            };
+
+            await department.Run(patients);
+        }
+    }
+}
