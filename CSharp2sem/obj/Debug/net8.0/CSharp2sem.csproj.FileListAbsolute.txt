@@ -13,3 +13,18 @@ C:\Users\tiger\OneDrive\Рабочий стол\C# разработка\CSharp2s
 C:\Users\tiger\OneDrive\Рабочий стол\C# разработка\CSharp2sem\CSharp2sem\obj\Debug\net8.0\CSharp2sem.pdb
 C:\Users\tiger\OneDrive\Рабочий стол\C# разработка\CSharp2sem\CSharp2sem\obj\Debug\net8.0\CSharp2sem.genruntimeconfig.cache
 C:\Users\tiger\OneDrive\Рабочий стол\C# разработка\CSharp2sem\CSharp2sem\obj\Debug\net8.0\ref\CSharp2sem.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\bin\Debug\net8.0\CSharp2sem.exe
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\bin\Debug\net8.0\CSharp2sem.deps.json
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\bin\Debug\net8.0\CSharp2sem.runtimeconfig.json
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\bin\Debug\net8.0\CSharp2sem.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\bin\Debug\net8.0\CSharp2sem.pdb
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.AssemblyInfoInputs.cache
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.AssemblyInfo.cs
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.csproj.CoreCompileInputs.cache
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.sourcelink.json
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\refint\CSharp2sem.dll
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.pdb
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\CSharp2sem.genruntimeconfig.cache
+C:\Users\tiger\OneDrive\Рабочий стол\git\CSharp2sem\obj\Debug\net8.0\ref\CSharp2sem.dll
